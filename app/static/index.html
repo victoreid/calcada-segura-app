@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calçada Segura</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; background: #16161b; color: #f2f2f5; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px; }
+  h1 span { color: #e8175d; }
+  .card { background: #22222a; border-radius: 10px; padding: 16px; margin: 12px 0; }
+  code { color: #f58ab0; }
+  li { margin: 6px 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Calçada <span>Segura</span></h1>
+  <p>MVP CitizenTech · FIAP Global Solution 2026.2. Página provisória até o dashboard ser publicado.</p>
+  <div class="card">
+    <strong>Status:</strong> <span id="status">verificando…</span>
+  </div>
+  <div class="card">
+    <strong>Últimas ocorrências</strong>
+    <ul id="lista"><li>carregando…</li></ul>
+  </div>
+  <p>Documentação da API: <a href="/docs" style="color:#f58ab0">/docs</a></p>
+</main>
+<script>
+fetch('/health').then(r => r.json()).then(d => {
+  document.getElementById('status').textContent = `${d.status} · versão ${d.versao} · banco ${d.banco}`;
+}).catch(() => { document.getElementById('status').textContent = 'indisponível'; });
+fetch('/api/v1/ocorrencias?limite=10').then(r => r.json()).then(itens => {
+  const ul = document.getElementById('lista');
+  ul.innerHTML = '';
+  if (!itens.length) { ul.innerHTML = '<li>Nenhuma ocorrência ainda.</li>'; return; }
+  for (const o of itens) {
+    const li = document.createElement('li');
+    li.textContent = `${o.tipo} · ${o.origem} · ${o.status} · (${o.lat}, ${o.lon})`;
+    ul.appendChild(li);
+  }
+});
+</script>
+</body>
+</html>

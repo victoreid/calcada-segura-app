@@ -1,0 +1,7 @@
+# Copie para terraform.tfvars (que está no .gitignore) e preencha.
+subscription_id     = "00000000-0000-0000-0000-000000000000"
+admin_ip_cidr       = "200.100.50.25/32"   # seu IP: curl ifconfig.me
+ssh_public_key_path = "~/.ssh/id_ed25519.pub"
+api_image           = "ghcr.io/calcada-segura/calcada-segura-app:latest"
+acme_email          = "seu-email@exemplo.com"
+# location          = "eastus2"            # só se brazilsouth for bloqueada

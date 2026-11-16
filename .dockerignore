@@ -1,0 +1,13 @@
+.git
+.github
+.env
+*.env
+**/__pycache__
+**/*.pyc
+*.db
+tests
+terraform
+monitoring
+docs
+deploy
+README.md

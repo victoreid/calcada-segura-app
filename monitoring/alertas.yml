@@ -1,0 +1,44 @@
+groups:
+  - name: calcada-segura
+    rules:
+      # ERROS: mais de 5% das requisições com resposta 5xx
+      - alert: TaxaDeErro5xxAlta
+        expr: |
+          sum(rate(http_requests_total{job="calcada-segura-mvp",status="5xx"}[2m]))
+            /
+          sum(rate(http_requests_total{job="calcada-segura-mvp"}[2m])) > 0.05
+        for: 1m
+        labels:
+          severidade: critica
+        annotations:
+          resumo: "Mais de 5% das requisições do MVP estão falhando"
+          descricao: "Taxa de erro 5xx em {{ $value | humanizePercentage }}"
+
+      # LATÊNCIA: p95 acima de 1 segundo
+      - alert: LatenciaP95Alta
+        expr: |
+          histogram_quantile(0.95,
+            sum by (le) (rate(http_request_duration_seconds_bucket{job="calcada-segura-mvp"}[5m]))) > 1
+        for: 2m
+        labels:
+          severidade: aviso
+        annotations:
+          resumo: "Latência p95 do MVP acima de 1s"
+
+      # DISPONIBILIDADE: Prometheus não consegue ler o MVP
+      - alert: MVPForaDoAr
+        expr: up{job="calcada-segura-mvp"} == 0
+        for: 1m
+        labels:
+          severidade: critica
+        annotations:
+          resumo: "O MVP não responde em /metrics"
+
+      # SATURAÇÃO: memória do processo acima de 400 MB
+      - alert: MemoriaAlta
+        expr: process_resident_memory_bytes{job="calcada-segura-mvp"} > 400e6
+        for: 5m
+        labels:
+          severidade: aviso
+        annotations:
+          resumo: "API usando mais de 400 MB de memória"

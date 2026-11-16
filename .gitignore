@@ -1,0 +1,23 @@
+# Segredos
+.env
+*.env
+!.env.example
+
+# Terraform: state e variáveis NUNCA vão para o repositório
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+*.tfplan
+
+# Prometheus local
+monitoring/secrets/
+
+# Python
+__pycache__/
+*.pyc
+*.db
+.venv/
+.pytest_cache/
