@@ -21,3 +21,8 @@ __pycache__/
 *.db
 .venv/
 .pytest_cache/
+
+# plano do Terraform (pode conter segredos)
+tfplan
+*.tfplan
+*.log
