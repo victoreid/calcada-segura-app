@@ -10,15 +10,15 @@ variable "prefixo" {
 }
 
 variable "location" {
-  description = "Região da Azure. Se a política da conta de estudante bloquear, use eastus2."
+  description = "Região da Azure. A conta Azure for Students só permite southcentralus, eastus2, northcentralus, chilecentral e canadacentral (brazilsouth é bloqueada)."
   type        = string
-  default     = "brazilsouth"
+  default     = "northcentralus"
 }
 
 variable "vm_size" {
-  description = "Tamanho da VM (B1ms = 1 vCPU, 2 GB)"
+  description = "Tamanho da VM (B2als_v2 = 2 vCPU, 4 GiB). B1ms e B2s estão sem capacidade nas regiões da conta."
   type        = string
-  default     = "Standard_B1ms"
+  default     = "Standard_B2als_v2"
 }
 
 variable "admin_username" {

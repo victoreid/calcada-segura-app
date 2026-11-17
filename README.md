@@ -23,7 +23,7 @@
 | Arquitetura: componentes | Robô (Maker Lab) · Visão YOLO · RPA de triagem · Airflow + Databricks · Assistente RAG com LLM local · **API central + dashboard na Azure (este repositório)** · Pitch |
 | Fontes de dados | Ocorrências do robô e da visão · SP156 (dados abertos) · Open-Meteo |
 | Modelos de IA utilizados | YOLO (detecção) · LLM local com RAG · classificador das leituras do robô |
-| URL do MVP e repositório | `https://<url_mvp>` · `https://github.com/<org>/calcada-segura-app` |
+| URL do MVP e repositório | https://calcada-segura-nc-6iey3.northcentralus.cloudapp.azure.com · https://github.com/victoreid/calcada-segura-app |
 | Indicadores de impacto | Problemas mapeados e críticos por subprefeitura · % triados em até 24 h · tempo médio até o conserto · % de rampas dentro de 8,33% |
 | ODS conectados | 11 · 10 · 9 · 3 |
 
@@ -38,10 +38,10 @@
                            ├─ Push ──► GHCR (ghcr.io/<org>/calcada-segura-app)
                            └─ Deploy: confirma a versão nova em /health
 
- Azure (criada 100% por Terraform) - região Brazil South
- ┌──────────────── Resource Group rg-calcada-segura ─────────────────┐
+ Azure (criada 100% por Terraform) - região North Central US
+ ┌──────────────── Resource Group rg-calcada-segura-nc ──────────────┐
  │ NSG: 443/80 abertos (site) · 22 SOMENTE para o IP do administrador │
- │ VM Ubuntu 24.04 (Standard_B1ms)                                    │
+ │ VM Ubuntu 24.04 (Standard_B2als_v2: 2 vCPU, 4 GiB)                 │
  │   ├─ Caddy  → HTTPS automático (Let's Encrypt) + headers seguros  │
  │   ├─ API FastAPI (container, usuário não root, read-only)         │
  │   ├─ PostgreSQL 16 (container, sem porta exposta)                 │
@@ -64,7 +64,7 @@ deploy/                   compose de produção, Caddyfile, script de deploy
 terraform/                infraestrutura Azure (VM, rede, NSG, IP, cloud-init)
 .github/workflows/        pipeline DevSecOps
 monitoring/               Prometheus, alertas, Grafana (4 métricas de ouro)
-docs/evidencias/          prints para o PDF
+docs/                     script da demonstração do Gitleaks
 ```
 
 ## 1. Rodar localmente
@@ -145,7 +145,7 @@ docker compose -f monitoring/docker-compose.monitoring.yml up -d
 | Banco sem porta exposta, senha gerada pelo Terraform | `deploy/docker-compose.prod.yml` |
 | State e `.tfvars` fora do Git | `.gitignore` |
 
-**Dados pessoais:** a API não guarda nome, e-mail nem telefone de ninguém. Os dados sensíveis são a **localização** (devolvida sempre com 4 casas decimais, cerca de 11 m) e as **fotos** (rostos e placas borrados pela Visão antes do envio). Ficam no PostgreSQL dentro da VM, em disco gerenciado da Azure, na região Brazil South.
+**Dados pessoais:** a API não guarda nome, e-mail nem telefone de ninguém. Os dados sensíveis são a **localização** (devolvida sempre com 4 casas decimais, cerca de 11 m) e as **fotos** (rostos e placas borrados pela Visão antes do envio). Ficam no PostgreSQL dentro da VM, em disco gerenciado da Azure, na região **North Central US** (EUA). A conta Azure for Students da FIAP só permite 5 regiões (southcentralus, eastus2, northcentralus, chilecentral e canadacentral), e `brazilsouth` é bloqueada por política. Como os dados são apenas coordenadas aproximadas e fotos com rostos e placas borrados, sem identificação de pessoas, o risco de uma transferência internacional é baixo. Em produção real, a base ficaria em uma região do Brasil (LGPD, art. 33).
 
 ## 6. Responsabilidade compartilhada (IaaS)
 
@@ -158,6 +158,6 @@ docker compose -f monitoring/docker-compose.monitoring.yml up -d
 
 ## 7. Estimativa de custo
 
-Monte em https://azure.microsoft.com/pricing/calculator com: 1 VM Linux Standard_B1ms (730 h/mês), 1 disco gerenciado Standard HDD 30 GB, 1 IP público Standard estático, tráfego de saída baixo, na região Brazil South. O GHCR e o GitHub Actions são gratuitos para repositório público. Coloque o print da calculadora no PDF.
+Monte em https://azure.microsoft.com/pricing/calculator com: 1 VM Linux Standard_B2als_v2 (730 h/mês, 2 vCPU e 4 GiB, cerca de US$ 27,45/mês no portal), 1 disco gerenciado Standard HDD 30 GB, 1 IP público Standard estático, tráfego de saída baixo, na região North Central US (a mesma que está em produção). O GHCR e o GitHub Actions são gratuitos para repositório público. Coloque o print da calculadora no PDF.
 
 > Não desligue a VM antes do fim da correção (até uma semana após 19/11).
