@@ -8,9 +8,9 @@
 | Nome completo | RM |
 |---|---|
 | Victor Eid Carbutti Nicolas | RM98668 |
-| _(JP - nome completo)_ | _RM_ |
-| _(Enzo - nome completo)_ | _RM_ |
-| _(Tiago - nome completo)_ | _RM_ |
+| João Pedro Cruz | RM98650 |
+| Enzo Luiz Goulart | RM99666 |
+| Tiago Paulino | RM551169 |
 
 ## Ficha Técnica do MVP
 
