@@ -13,7 +13,7 @@ scrape_configs:
       username: prometheus
       password_file: /etc/prometheus/metrics_password
     static_configs:
-      # TROQUE pelo domínio da saída "url_mvp" do Terraform (sem https://)
-      - targets: ["calcada-segura-xxxxx.brazilsouth.cloudapp.azure.com"]
+      # TROQUE pelo domÃ­nio da saÃ­da "url_mvp" do Terraform (sem https://)
+      - targets: ["calcada-segura-nc-6iey3.northcentralus.cloudapp.azure.com"]
         labels:
           ambiente: producao
